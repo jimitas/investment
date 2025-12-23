@@ -78,34 +78,34 @@
                     </div>
 
                     <div class="formula-example">
-                        <p class="example-title">例: 3万円を毎月積み立てた場合</p>
+                        <p class="example-title">例: <span id="formulaMonthlyAmount">3</span>万円を毎月積み立てた場合</p>
 
                         <div class="calc-step">
                             <p class="step-title"><strong>【投資の場合：年利5%】</strong></p>
                             <ul>
-                                <li>月利 = 5% ÷ 12 = <strong>0.004167</strong>（約0.42%）</li>
-                                <li class="highlight-result">20年後の資産 = 30,000円 × {((1.004167)<sup>240</sup> - 1) ÷ 0.004167}</li>
-                                <li class="highlight-result">　　　　　　 = 30,000円 × {(2.712 - 1) ÷ 0.004167}</li>
-                                <li class="highlight-result">　　　　　　 = 30,000円 × 411</li>
-                                <li class="highlight-result">　　　　　　 = <strong>約1,233万円</strong></li>
+                                <li>月利 = 5% ÷ 12 = <strong id="investmentMonthlyRate">0.004167</strong>（約0.42%）</li>
+                                <li class="highlight-result" id="investmentCalc1">20年後の資産 = ¥30,000 × {((1.004167)<sup>240</sup> - 1) ÷ 0.004167}</li>
+                                <li class="highlight-result" id="investmentCalc2">　　　　　　 = ¥30,000 × {(2.712 - 1) ÷ 0.004167}</li>
+                                <li class="highlight-result" id="investmentCalc3">　　　　　　 = ¥30,000 × 411</li>
+                                <li class="highlight-result">　　　　　　 = <strong id="investmentResult">¥12,332,827</strong></li>
                             </ul>
-                            <p class="calc-note">元本720万円 → <strong>513万円も増加！</strong></p>
+                            <p class="calc-note">元本<span id="investmentPrincipalFormula">¥7,200,000</span> → <strong id="investmentProfitFormula">¥5,132,827</strong>も増加！</p>
                         </div>
 
                         <div class="calc-step">
                             <p class="step-title"><strong>【貯蓄の場合：年利0.3%】</strong></p>
                             <ul>
-                                <li>月利 = 0.3% ÷ 12 = <strong>0.000025</strong>（約0.025%）</li>
-                                <li class="highlight-result">20年後の資産 = 30,000円 × {((1.000025)<sup>240</sup> - 1) ÷ 0.000025}</li>
-                                <li class="highlight-result">　　　　　　 = 30,000円 × 243</li>
-                                <li class="highlight-result">　　　　　　 = <strong>約729万円</strong></li>
+                                <li>月利 = 0.3% ÷ 12 = <strong id="savingMonthlyRate">0.000250</strong>（約0.025%）</li>
+                                <li class="highlight-result" id="savingCalc1">20年後の資産 = ¥30,000 × {((1.000250)<sup>240</sup> - 1) ÷ 0.000250}</li>
+                                <li class="highlight-result" id="savingCalc2">　　　　　　 = ¥30,000 × 247</li>
+                                <li class="highlight-result">　　　　　　 = <strong id="savingResult">¥7,419,430</strong></li>
                             </ul>
-                            <p class="calc-note">元本720万円 → <strong>9万円しか増えない...</strong></p>
+                            <p class="calc-note">元本<span id="savingPrincipalFormula">¥7,200,000</span> → <strong id="savingInterestFormula">¥219,430</strong>しか増えない...</p>
                         </div>
                     </div>
 
                     <div class="comparison-note">
-                        <p><strong>同じ金額を積み立てても、差は約504万円！</strong></p>
+                        <p><strong>同じ金額を積み立てても、差は<span id="formulaDifference">¥4,913,397</span>！</strong></p>
                         <p>年利が違うだけで、20年後にこんなに大きな差が生まれます。複利の力を実感してください！</p>
                     </div>
                 </div>

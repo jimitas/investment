@@ -62,7 +62,58 @@ function simulateInvestment(monthlyAmount) {
 
     document.getElementById('resultSection').style.display = 'block';
 
+    updateFormulaSection(monthlyAmount, principal, savingData[months - 1], investmentData[months - 1], savingInterest, investmentProfit, difference);
+
     drawChart(labels, savingData, investmentData);
+}
+
+function updateFormulaSection(monthlyAmount, principal, savingTotal, investmentTotal, savingInterest, investmentProfit, difference) {
+    // 万円単位に変換
+    const monthlyManEn = monthlyAmount / 10000;
+
+    // 投資の計算（年利5%）
+    const investmentRate = 0.05 / 12;
+    const investmentMultiplier = ((Math.pow(1 + investmentRate, 240) - 1) / investmentRate);
+    const investmentPow = Math.pow(1 + investmentRate, 240);
+
+    // 貯蓄の計算（年利0.3%）
+    const savingRate = 0.003 / 12;
+    const savingMultiplier = ((Math.pow(1 + savingRate, 240) - 1) / savingRate);
+
+    // HTMLを更新
+    document.getElementById('formulaMonthlyAmount').textContent = monthlyManEn.toFixed(0);
+
+    // 投資の計算過程
+    const investmentRateStr = investmentRate.toFixed(6);
+    const investmentRateDisplay = investmentRateStr.replace(/0+$/, '').replace(/\.$/, '');
+    document.getElementById('investmentMonthlyRate').textContent = investmentRateDisplay;
+
+    const investmentCalc1 = document.getElementById('investmentCalc1');
+    investmentCalc1.innerHTML = `20年後の資産 = ${formatCurrency(monthlyAmount)} × {((1.${investmentRateStr.slice(2)})<sup>240</sup> - 1) ÷ ${investmentRateDisplay}}`;
+
+    const investmentCalc2 = document.getElementById('investmentCalc2');
+    investmentCalc2.textContent = `　　　　　　 = ${formatCurrency(monthlyAmount)} × {(${investmentPow.toFixed(3)} - 1) ÷ ${investmentRateDisplay}}`;
+
+    document.getElementById('investmentCalc3').textContent = `　　　　　　 = ${formatCurrency(monthlyAmount)} × ${Math.round(investmentMultiplier)}`;
+    document.getElementById('investmentResult').textContent = formatCurrency(investmentTotal);
+    document.getElementById('investmentPrincipalFormula').textContent = formatCurrency(principal);
+    document.getElementById('investmentProfitFormula').textContent = formatCurrency(investmentProfit);
+
+    // 貯蓄の計算過程
+    const savingRateStr = savingRate.toFixed(6);
+    const savingRateDisplay = savingRateStr.replace(/0+$/, '').replace(/\.$/, '');
+    document.getElementById('savingMonthlyRate').textContent = savingRateDisplay;
+
+    const savingCalc1 = document.getElementById('savingCalc1');
+    savingCalc1.innerHTML = `20年後の資産 = ${formatCurrency(monthlyAmount)} × {((1.${savingRateStr.slice(2)})<sup>240</sup> - 1) ÷ ${savingRateDisplay}}`;
+
+    document.getElementById('savingCalc2').textContent = `　　　　　　 = ${formatCurrency(monthlyAmount)} × ${Math.round(savingMultiplier)}`;
+    document.getElementById('savingResult').textContent = formatCurrency(savingTotal);
+    document.getElementById('savingPrincipalFormula').textContent = formatCurrency(principal);
+    document.getElementById('savingInterestFormula').textContent = formatCurrency(savingInterest);
+
+    // 差額
+    document.getElementById('formulaDifference').textContent = formatCurrency(difference);
 }
 
 function drawChart(labels, savingData, investmentData) {

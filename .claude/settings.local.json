@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n投資シミュレーションアプリの初回コミット\n\n- 貯蓄\\(年利0.3%\\)と投資\\(年利5%\\)の20年間のシミュレーション\n- Chart.jsを使用したグラフ表示\n- 複利計算の詳細な解説セクション\n- レスポンシブデザイン対応\\(デスクトップ/タブレット/スマートフォン\\)\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(node -e:*)"
     ]
   }
 }
