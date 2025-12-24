@@ -2,13 +2,22 @@ let myChart = null;
 
 document.getElementById('simulateBtn').addEventListener('click', function() {
     const monthlyAmount = parseFloat(document.getElementById('monthlyAmount').value);
+    const investmentYears = parseInt(document.getElementById('investmentYears').value);
 
     if (!monthlyAmount || monthlyAmount <= 0) {
         alert('正しい金額を入力してください');
         return;
     }
 
-    simulateInvestment(monthlyAmount * 10000);
+    if (!investmentYears || investmentYears < 1 || investmentYears > 50) {
+        alert('投資期間は1年から50年の間で入力してください');
+        return;
+    }
+
+    // info-panelの運用期間を更新
+    document.getElementById('displayPeriod').textContent = `${investmentYears}年間 (複利)`;
+
+    simulateInvestment(monthlyAmount * 10000, investmentYears);
 });
 
 document.getElementById('monthlyAmount').addEventListener('keypress', function(e) {
@@ -17,10 +26,16 @@ document.getElementById('monthlyAmount').addEventListener('keypress', function(e
     }
 });
 
-function simulateInvestment(monthlyAmount) {
+document.getElementById('investmentYears').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('simulateBtn').click();
+    }
+});
+
+function simulateInvestment(monthlyAmount, years) {
     const savingRate = 0.003 / 12;
     const investmentRate = 0.05 / 12;
-    const months = 240;
+    const months = years * 12;
 
     let savingData = [];
     let investmentData = [];
@@ -29,6 +44,16 @@ function simulateInvestment(monthlyAmount) {
     let savingTotal = 0;
     let investmentTotal = 0;
 
+    // ラベルの間隔を年数に応じて調整
+    let labelInterval;
+    if (years <= 10) {
+        labelInterval = 12; // 1年ごと
+    } else if (years <= 30) {
+        labelInterval = 24; // 2年ごと
+    } else {
+        labelInterval = 60; // 5年ごと
+    }
+
     for (let month = 1; month <= months; month++) {
         savingTotal = (savingTotal * (1 + savingRate)) + monthlyAmount;
         investmentTotal = (investmentTotal * (1 + investmentRate)) + monthlyAmount;
@@ -36,7 +61,7 @@ function simulateInvestment(monthlyAmount) {
         savingData.push(Math.round(savingTotal));
         investmentData.push(Math.round(investmentTotal));
 
-        if (month % 24 === 0) {
+        if (month % labelInterval === 0) {
             labels.push(`${month / 12}年`);
         } else if (month === 1) {
             labels.push('0年');
@@ -62,23 +87,34 @@ function simulateInvestment(monthlyAmount) {
 
     document.getElementById('resultSection').style.display = 'block';
 
-    updateFormulaSection(monthlyAmount, principal, savingData[months - 1], investmentData[months - 1], savingInterest, investmentProfit, difference);
+    updateFormulaSection(monthlyAmount, years, months, principal, savingData[months - 1], investmentData[months - 1], savingInterest, investmentProfit, difference);
 
     drawChart(labels, savingData, investmentData);
 }
 
-function updateFormulaSection(monthlyAmount, principal, savingTotal, investmentTotal, savingInterest, investmentProfit, difference) {
+function updateFormulaSection(monthlyAmount, years, months, principal, savingTotal, investmentTotal, savingInterest, investmentProfit, difference) {
     // 万円単位に変換
     const monthlyManEn = monthlyAmount / 10000;
 
     // 投資の計算（年利5%）
     const investmentRate = 0.05 / 12;
-    const investmentMultiplier = ((Math.pow(1 + investmentRate, 240) - 1) / investmentRate);
-    const investmentPow = Math.pow(1 + investmentRate, 240);
+    const investmentMultiplier = ((Math.pow(1 + investmentRate, months) - 1) / investmentRate);
+    const investmentPow = Math.pow(1 + investmentRate, months);
 
     // 貯蓄の計算（年利0.3%）
     const savingRate = 0.003 / 12;
-    const savingMultiplier = ((Math.pow(1 + savingRate, 240) - 1) / savingRate);
+    const savingMultiplier = ((Math.pow(1 + savingRate, months) - 1) / savingRate);
+
+    // 年数の表示を更新
+    document.getElementById('yearsInTitle').textContent = years;
+    document.getElementById('yearsInFormula1').textContent = years;
+    document.getElementById('yearsInFormula2').textContent = years;
+    document.getElementById('monthsInFormula').textContent = months;
+    document.getElementById('monthsInDetail').textContent = months;
+    document.getElementById('yearsInDetail').textContent = years;
+    document.getElementById('yearsInInvestCalc1').textContent = years;
+    document.getElementById('yearsInSavingCalc1').textContent = years;
+    document.getElementById('yearsInComparison').textContent = years;
 
     // HTMLを更新
     document.getElementById('formulaMonthlyAmount').textContent = monthlyManEn.toFixed(0);
@@ -89,7 +125,7 @@ function updateFormulaSection(monthlyAmount, principal, savingTotal, investmentT
     document.getElementById('investmentMonthlyRate').textContent = investmentRateDisplay;
 
     const investmentCalc1 = document.getElementById('investmentCalc1');
-    investmentCalc1.innerHTML = `20年後の資産 = ${formatCurrency(monthlyAmount)} × {((1.${investmentRateStr.slice(2)})<sup>240</sup> - 1) ÷ ${investmentRateDisplay}}`;
+    investmentCalc1.innerHTML = `<span id="yearsInInvestCalc1">${years}</span>年後の資産 = ${formatCurrency(monthlyAmount)} × {((1.${investmentRateStr.slice(2)})<sup>${months}</sup> - 1) ÷ ${investmentRateDisplay}}`;
 
     const investmentCalc2 = document.getElementById('investmentCalc2');
     investmentCalc2.textContent = `　　　　　　 = ${formatCurrency(monthlyAmount)} × {(${investmentPow.toFixed(3)} - 1) ÷ ${investmentRateDisplay}}`;
@@ -105,7 +141,7 @@ function updateFormulaSection(monthlyAmount, principal, savingTotal, investmentT
     document.getElementById('savingMonthlyRate').textContent = savingRateDisplay;
 
     const savingCalc1 = document.getElementById('savingCalc1');
-    savingCalc1.innerHTML = `20年後の資産 = ${formatCurrency(monthlyAmount)} × {((1.${savingRateStr.slice(2)})<sup>240</sup> - 1) ÷ ${savingRateDisplay}}`;
+    savingCalc1.innerHTML = `<span id="yearsInSavingCalc1">${years}</span>年後の資産 = ${formatCurrency(monthlyAmount)} × {((1.${savingRateStr.slice(2)})<sup>${months}</sup> - 1) ÷ ${savingRateDisplay}}`;
 
     document.getElementById('savingCalc2').textContent = `　　　　　　 = ${formatCurrency(monthlyAmount)} × ${Math.round(savingMultiplier)}`;
     document.getElementById('savingResult').textContent = formatCurrency(savingTotal);

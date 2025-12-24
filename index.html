@@ -22,13 +22,17 @@
             </div>
             <div class="info-item">
                 <span class="label">運用期間:</span>
-                <span class="value">20年間 (複利)</span>
+                <span class="value" id="displayPeriod">金額と期間を入力してください</span>
             </div>
         </div>
 
         <div class="input-section">
             <label for="monthlyAmount">毎月の積立金額 (万円):</label>
-            <input type="number" id="monthlyAmount" min="1" step="1" value="3" placeholder="例: 3">
+            <input type="number" id="monthlyAmount" min="1" step="1" placeholder="例: 3">
+
+            <label for="investmentYears">投資期間 (年):</label>
+            <input type="number" id="investmentYears" min="1" max="50" step="1" placeholder="例: 20">
+
             <button id="simulateBtn">グラフ作成</button>
         </div>
 
@@ -59,7 +63,7 @@
             </div>
 
             <div class="formula-section">
-                <h3>20年後の資産はいくらになる？</h3>
+                <h3><span id="yearsInTitle">20</span>年後の資産はいくらになる？</h3>
                 <div class="formula-explanation">
                     <p class="formula-title">複利で積み立てると、こんなに増える！</p>
                     <p class="formula-text">
@@ -68,12 +72,12 @@
                     </p>
 
                     <div class="formula-box">
-                        <p class="formula-label">20年後の資産を計算する式：</p>
+                        <p class="formula-label"><span id="yearsInFormula1">20</span>年後の資産を計算する式：</p>
                         <p class="formula-math">
-                            <span class="highlight">20年後の資産</span> = <span class="monthly">毎月の積立額</span> × {((1 + <span class="rate">月利</span>)<sup>240</sup> - 1) ÷ <span class="rate">月利</span>}
+                            <span class="highlight"><span id="yearsInFormula2">20</span>年後の資産</span> = <span class="monthly">毎月の積立額</span> × {((1 + <span class="rate">月利</span>)<sup id="monthsInFormula">240</sup> - 1) ÷ <span class="rate">月利</span>}
                         </p>
                         <p class="formula-detail">
-                            ※ 月利 = 年利 ÷ 12、240 = 20年 × 12ヶ月
+                            ※ 月利 = 年利 ÷ 12、<span id="monthsInDetail">240</span> = <span id="yearsInDetail">20</span>年 × 12ヶ月
                         </p>
                     </div>
 
@@ -84,7 +88,7 @@
                             <p class="step-title"><strong>【投資の場合：年利5%】</strong></p>
                             <ul>
                                 <li>月利 = 5% ÷ 12 = <strong id="investmentMonthlyRate">0.004167</strong>（約0.42%）</li>
-                                <li class="highlight-result" id="investmentCalc1">20年後の資産 = ¥30,000 × {((1.004167)<sup>240</sup> - 1) ÷ 0.004167}</li>
+                                <li class="highlight-result" id="investmentCalc1"><span id="yearsInInvestCalc1">20</span>年後の資産 = ¥30,000 × {((1.004167)<sup>240</sup> - 1) ÷ 0.004167}</li>
                                 <li class="highlight-result" id="investmentCalc2">　　　　　　 = ¥30,000 × {(2.712 - 1) ÷ 0.004167}</li>
                                 <li class="highlight-result" id="investmentCalc3">　　　　　　 = ¥30,000 × 411</li>
                                 <li class="highlight-result">　　　　　　 = <strong id="investmentResult">¥12,332,827</strong></li>
@@ -96,7 +100,7 @@
                             <p class="step-title"><strong>【貯蓄の場合：年利0.3%】</strong></p>
                             <ul>
                                 <li>月利 = 0.3% ÷ 12 = <strong id="savingMonthlyRate">0.000250</strong>（約0.025%）</li>
-                                <li class="highlight-result" id="savingCalc1">20年後の資産 = ¥30,000 × {((1.000250)<sup>240</sup> - 1) ÷ 0.000250}</li>
+                                <li class="highlight-result" id="savingCalc1"><span id="yearsInSavingCalc1">20</span>年後の資産 = ¥30,000 × {((1.000250)<sup>240</sup> - 1) ÷ 0.000250}</li>
                                 <li class="highlight-result" id="savingCalc2">　　　　　　 = ¥30,000 × 247</li>
                                 <li class="highlight-result">　　　　　　 = <strong id="savingResult">¥7,419,430</strong></li>
                             </ul>
@@ -106,7 +110,7 @@
 
                     <div class="comparison-note">
                         <p><strong>同じ金額を積み立てても、差は<span id="formulaDifference">¥4,913,397</span>！</strong></p>
-                        <p>年利が違うだけで、20年後にこんなに大きな差が生まれます。複利の力を実感してください！</p>
+                        <p>年利が違うだけで、<span id="yearsInComparison">20</span>年後にこんなに大きな差が生まれます。複利の力を実感してください！</p>
                     </div>
                 </div>
             </div>
