@@ -1,18 +1,8 @@
 let myChart = null;
 
-// レート設定
-const SAVING_RATE_PERCENT = 0.3; // 貯蓄金利は固定
-let INVESTMENT_RATE_PERCENT = 5.0; // 投資利回りは変更可能
-
 document.getElementById('simulateBtn').addEventListener('click', function() {
-    const investmentRate = parseFloat(document.getElementById('investmentRate').value);
     const monthlyAmount = parseFloat(document.getElementById('monthlyAmount').value);
     const investmentYears = parseInt(document.getElementById('investmentYears').value);
-
-    if (!investmentRate && investmentRate !== 0 || investmentRate < 0 || investmentRate > 100) {
-        alert('投資利回りは0%から100%の間で入力してください');
-        return;
-    }
 
     if (!monthlyAmount || monthlyAmount <= 0) {
         alert('正しい金額を入力してください');
@@ -24,19 +14,10 @@ document.getElementById('simulateBtn').addEventListener('click', function() {
         return;
     }
 
-    // 投資利回りを更新
-    INVESTMENT_RATE_PERCENT = investmentRate;
-
     // info-panelの運用期間を更新
     document.getElementById('displayPeriod').textContent = `${investmentYears}年間 (複利)`;
 
     simulateInvestment(monthlyAmount * 10000, investmentYears);
-});
-
-document.getElementById('investmentRate').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        document.getElementById('simulateBtn').click();
-    }
 });
 
 document.getElementById('monthlyAmount').addEventListener('keypress', function(e) {
@@ -52,8 +33,8 @@ document.getElementById('investmentYears').addEventListener('keypress', function
 });
 
 function simulateInvestment(monthlyAmount, years) {
-    const savingRate = (SAVING_RATE_PERCENT / 100) / 12;
-    const investmentRate = (INVESTMENT_RATE_PERCENT / 100) / 12;
+    const savingRate = 0.003 / 12;
+    const investmentRate = 0.05 / 12;
     const months = years * 12;
 
     let savingData = [];
@@ -115,13 +96,13 @@ function updateFormulaSection(monthlyAmount, years, months, principal, savingTot
     // 万円単位に変換
     const monthlyManEn = monthlyAmount / 10000;
 
-    // 投資の計算
-    const investmentRate = (INVESTMENT_RATE_PERCENT / 100) / 12;
+    // 投資の計算（年利5%）
+    const investmentRate = 0.05 / 12;
     const investmentMultiplier = ((Math.pow(1 + investmentRate, months) - 1) / investmentRate);
     const investmentPow = Math.pow(1 + investmentRate, months);
 
-    // 貯蓄の計算
-    const savingRate = (SAVING_RATE_PERCENT / 100) / 12;
+    // 貯蓄の計算（年利0.3%）
+    const savingRate = 0.003 / 12;
     const savingMultiplier = ((Math.pow(1 + savingRate, months) - 1) / savingRate);
 
     // 年数の表示を更新
@@ -169,9 +150,6 @@ function updateFormulaSection(monthlyAmount, years, months, principal, savingTot
 
     // 差額
     document.getElementById('formulaDifference').textContent = formatCurrency(difference);
-
-    // レート表示を更新
-    updateRateDisplays();
 }
 
 function drawChart(labels, savingData, investmentData) {
@@ -194,7 +172,7 @@ function drawChart(labels, savingData, investmentData) {
             labels: labels,
             datasets: [
                 {
-                    label: `貯蓄 (${SAVING_RATE_PERCENT.toFixed(1)}%)`,
+                    label: '貯蓄 (0.3%)',
                     data: savingData,
                     borderColor: '#3498db',
                     backgroundColor: 'rgba(52, 152, 219, 0.1)',
@@ -203,7 +181,7 @@ function drawChart(labels, savingData, investmentData) {
                     fill: true
                 },
                 {
-                    label: `投資 (${INVESTMENT_RATE_PERCENT.toFixed(1)}%)`,
+                    label: '投資 (5.0%)',
                     data: investmentData,
                     borderColor: '#e74c3c',
                     backgroundColor: 'rgba(231, 76, 60, 0.1)',
@@ -326,40 +304,3 @@ function drawChart(labels, savingData, investmentData) {
 function formatCurrency(value) {
     return '¥' + Math.round(value).toLocaleString('ja-JP');
 }
-
-function updateRateDisplays() {
-    // レート表示用のフォーマット関数
-    const formatRate = (rate) => {
-        // 小数点以下の桁数を調整（0.3 -> "0.3%", 5.0 -> "5.0%"）
-        return rate.toFixed(1) + '%';
-    };
-
-    const savingRateText = formatRate(SAVING_RATE_PERCENT);
-    const investmentRateText = formatRate(INVESTMENT_RATE_PERCENT);
-
-    // 上部パネル
-    document.getElementById('savingRateDisplay').textContent = savingRateText;
-    document.getElementById('investmentRateDisplay').textContent = investmentRateText;
-
-    // サマリーセクション
-    document.getElementById('savingRateSummary').textContent = savingRateText;
-    document.getElementById('investmentRateSummary').textContent = investmentRateText;
-
-    // 計算式セクション
-    document.getElementById('investmentRateFormula').textContent = investmentRateText.replace('.0', '');
-    document.getElementById('investmentRateFormulaText').textContent = investmentRateText.replace('.0', '');
-    document.getElementById('savingRateFormula').textContent = savingRateText;
-    document.getElementById('savingRateFormulaText').textContent = savingRateText;
-}
-
-// ページ読み込み時に初期表示を更新
-document.addEventListener('DOMContentLoaded', function() {
-    // 投資利回りの入力フィールドから初期値を読み取る
-    const investmentRateInput = document.getElementById('investmentRate');
-
-    if (investmentRateInput.value) {
-        INVESTMENT_RATE_PERCENT = parseFloat(investmentRateInput.value);
-    }
-
-    updateRateDisplays();
-});

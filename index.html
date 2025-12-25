@@ -14,11 +14,11 @@
         <div class="info-panel">
             <div class="info-item">
                 <span class="label">貯蓄金利:</span>
-                <span class="value"><span id="savingRateDisplay">0.3%</span> (年利)</span>
+                <span class="value">0.3% (年利)</span>
             </div>
             <div class="info-item">
                 <span class="label">投資利回り:</span>
-                <span class="value"><span id="investmentRateDisplay">5.0%</span> (年利)</span>
+                <span class="value">5.0% (年利)</span>
             </div>
             <div class="info-item">
                 <span class="label">運用期間:</span>
@@ -27,9 +27,6 @@
         </div>
 
         <div class="input-section">
-            <label for="investmentRate">投資利回り (%):</label>
-            <input type="number" id="investmentRate" min="0" max="100" step="0.1" value="5.0" placeholder="例: 5.0">
-
             <label for="monthlyAmount">毎月の積立金額 (万円):</label>
             <input type="number" id="monthlyAmount" min="1" step="1" placeholder="例: 3">
 
@@ -48,13 +45,13 @@
 
             <div class="summary">
                 <div class="summary-item saving">
-                    <h3>貯蓄 (<span id="savingRateSummary">0.3%</span>)</h3>
+                    <h3>貯蓄 (0.3%)</h3>
                     <p class="amount" id="savingTotal">-</p>
                     <p class="detail">元本: <span id="savingPrincipal">-</span></p>
                     <p class="detail">利息: <span id="savingInterest">-</span></p>
                 </div>
                 <div class="summary-item investment">
-                    <h3>投資 (<span id="investmentRateSummary">5.0%</span>)</h3>
+                    <h3>投資 (5.0%)</h3>
                     <p class="amount" id="investmentTotal">-</p>
                     <p class="detail">元本: <span id="investmentPrincipal">-</span></p>
                     <p class="detail">運用益: <span id="investmentProfit">-</span></p>
@@ -88,9 +85,9 @@
                         <p class="example-title">例: <span id="formulaMonthlyAmount">3</span>万円を毎月積み立てた場合</p>
 
                         <div class="calc-step">
-                            <p class="step-title"><strong>【投資の場合：年利<span id="investmentRateFormula">5%</span>】</strong></p>
+                            <p class="step-title"><strong>【投資の場合：年利5%】</strong></p>
                             <ul>
-                                <li>月利 = <span id="investmentRateFormulaText">5%</span> ÷ 12 = <strong id="investmentMonthlyRate">0.004167</strong>（約0.42%）</li>
+                                <li>月利 = 5% ÷ 12 = <strong id="investmentMonthlyRate">0.004167</strong>（約0.42%）</li>
                                 <li class="highlight-result" id="investmentCalc1"><span id="yearsInInvestCalc1">20</span>年後の資産 = ¥30,000 × {((1.004167)<sup>240</sup> - 1) ÷ 0.004167}</li>
                                 <li class="highlight-result" id="investmentCalc2">　　　　　　 = ¥30,000 × {(2.712 - 1) ÷ 0.004167}</li>
                                 <li class="highlight-result" id="investmentCalc3">　　　　　　 = ¥30,000 × 411</li>
@@ -100,9 +97,9 @@
                         </div>
 
                         <div class="calc-step">
-                            <p class="step-title"><strong>【貯蓄の場合：年利<span id="savingRateFormula">0.3%</span>】</strong></p>
+                            <p class="step-title"><strong>【貯蓄の場合：年利0.3%】</strong></p>
                             <ul>
-                                <li>月利 = <span id="savingRateFormulaText">0.3%</span> ÷ 12 = <strong id="savingMonthlyRate">0.000250</strong>（約0.025%）</li>
+                                <li>月利 = 0.3% ÷ 12 = <strong id="savingMonthlyRate">0.000250</strong>（約0.025%）</li>
                                 <li class="highlight-result" id="savingCalc1"><span id="yearsInSavingCalc1">20</span>年後の資産 = ¥30,000 × {((1.000250)<sup>240</sup> - 1) ÷ 0.000250}</li>
                                 <li class="highlight-result" id="savingCalc2">　　　　　　 = ¥30,000 × 247</li>
                                 <li class="highlight-result">　　　　　　 = <strong id="savingResult">¥7,419,430</strong></li>
