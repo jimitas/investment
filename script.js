@@ -1,12 +1,18 @@
 let myChart = null;
 
-// レート定数（パーセント表記）
-const SAVING_RATE_PERCENT = 0.3;
-const INVESTMENT_RATE_PERCENT = 5.0;
+// レート設定
+const SAVING_RATE_PERCENT = 0.3; // 貯蓄金利は固定
+let INVESTMENT_RATE_PERCENT = 5.0; // 投資利回りは変更可能
 
 document.getElementById('simulateBtn').addEventListener('click', function() {
+    const investmentRate = parseFloat(document.getElementById('investmentRate').value);
     const monthlyAmount = parseFloat(document.getElementById('monthlyAmount').value);
     const investmentYears = parseInt(document.getElementById('investmentYears').value);
+
+    if (!investmentRate && investmentRate !== 0 || investmentRate < 0 || investmentRate > 100) {
+        alert('投資利回りは0%から100%の間で入力してください');
+        return;
+    }
 
     if (!monthlyAmount || monthlyAmount <= 0) {
         alert('正しい金額を入力してください');
@@ -18,10 +24,19 @@ document.getElementById('simulateBtn').addEventListener('click', function() {
         return;
     }
 
+    // 投資利回りを更新
+    INVESTMENT_RATE_PERCENT = investmentRate;
+
     // info-panelの運用期間を更新
     document.getElementById('displayPeriod').textContent = `${investmentYears}年間 (複利)`;
 
     simulateInvestment(monthlyAmount * 10000, investmentYears);
+});
+
+document.getElementById('investmentRate').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('simulateBtn').click();
+    }
 });
 
 document.getElementById('monthlyAmount').addEventListener('keypress', function(e) {
@@ -339,5 +354,12 @@ function updateRateDisplays() {
 
 // ページ読み込み時に初期表示を更新
 document.addEventListener('DOMContentLoaded', function() {
+    // 投資利回りの入力フィールドから初期値を読み取る
+    const investmentRateInput = document.getElementById('investmentRate');
+
+    if (investmentRateInput.value) {
+        INVESTMENT_RATE_PERCENT = parseFloat(investmentRateInput.value);
+    }
+
     updateRateDisplays();
 });
